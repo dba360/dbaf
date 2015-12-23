@@ -2,12 +2,12 @@
 import sys
 import os
 import getopt
-import utlcnfg
+#import utlcnfg
 
-#import s24dply
-#import s24rcat
+#import dply
+#import rcat
 
-class s24dbaf():
+class dbaf():
     #
     # Constant definitions
     #
@@ -34,7 +34,7 @@ class s24dbaf():
         self.password_length = 0
 
         self.dbst_dest = ''
-        self.backup_base = ''
+        self.bckp_base = ''
 
         self.debug_commands = False
         self.debug_internals = False
@@ -81,7 +81,7 @@ class s24dbaf():
                                                                                    'create_directory',
                                                                                    'create_backup_directories',
                                                                                    'create_local_directories',
-                                                                                   'create_s24dba_user',
+                                                                                   'create_dba_user',
                                                                                    'list_oratab',
                                                                                    'deploy_sshkeys',
                                                                                    'display_local_sshkeys',
@@ -183,7 +183,7 @@ class s24dbaf():
                 p_help = True
     
             # --------------------------------------------------------------------------
-            # s24dply module
+            # dply module
             # Creates a single directory
             elif opt in ('--create_directory':
                 p_execute = 'create_directory'
@@ -197,8 +197,8 @@ class s24dbaf():
                 p_execute = 'create_local_directories'
     
             # Creates local directories for the host and each database
-            elif opt in ('--create_s24dba_user':
-                p_execute = 'create_s24dba_user'
+            elif opt in ('--create_dba_user':
+                p_execute = 'create_dba_user'
     
             # Lists entries in oratab
             elif opt in ('--list_oratab':
@@ -241,7 +241,7 @@ class s24dbaf():
     
     
             # --------------------------------------------------------------------------
-            # s24rcat module
+            # rcat module
             # Create rman catalog owner
             # Requires client code
             elif opt in ('--create_rman_catalog_owner'):
@@ -300,7 +300,7 @@ class s24dbaf():
         if p_hostname != '':
             self.hostname = p_hostname
         else:
-            self.hostname = s24dply.get_hostname()
+            self.hostname = dply.get_hostname()
     
         # Sets the global name of the database
         if p_global_database_name != '':
@@ -319,7 +319,7 @@ class s24dbaf():
             print 'self.instance = p_instance'
     
         if self.instance == '':
-            self.instance = s24dply.get_oracle_sid()
+            self.instance = dply.get_oracle_sid()
         #requires creating self object
         #else:
         #    self.instance = set_oracle_sid(self.instance)
@@ -366,18 +366,18 @@ class s24dbaf():
     
     
         # Verify the environment is setup properly
-        # Verify that S24DBAF_BASE is set
+        # Verify that DBAF_BASE is set
         try:
-            os.environ["S24DBAF_BASE"]
+            os.environ["DBAF_BASE"]
         except KeyError:
-            print "S24DBAF_BASE environment variable is not set."
+            print "DBAF_BASE environment variable is not set."
             print "Exiting"
             sys.exit()
     
-        # Verify the S24DBAF_BASE directory exists
-        self.s24dbaf_base = os.environ["S24DBAF_BASE"].rstrip('\/')
-        if not os.path.exists(self.s24dbaf_base):
-            print "The directory '" + self.s24dbaf_base + "' does not exist."
+        # Verify the DBAF_BASE directory exists
+        self.dbaf_base = os.environ["DBAF_BASE"].rstrip('\/')
+        if not os.path.exists(self.dbaf_base):
+            print "The directory '" + self.dbaf_base + "' does not exist."
             print "Exiting"
             sys.exit()
     
@@ -395,8 +395,8 @@ class s24dbaf():
             print "  USERNAME:     " + self.username
             print "  SCHEDULE:     " + self.schedule
             print "  EXECUTE:      " + self.execute
-            print "  S24DBAF_HOME: " + self.s24dbaf_home_dir
-            print "  BACKUP_BASE:  " + self.backup_base_dir
+            print "  DBAF_HOME:    " + self.dbaf_home_dir
+            print "  BCKP_BASE:    " + self.bckp_base_dir
             print "  DIRECTORY:    " + self.directory
     
     
@@ -405,14 +405,14 @@ class s24dbaf():
     
     
         # --------------------------------------------------------------------------
-        # s24dply module
-        s24dply = s24dply()
-        s24dply.debug_commands = self.debug_commands
-        s24dply.debug_internals = self.debug_internals
+        # dply module
+        dply = dply()
+        dply.debug_commands = self.debug_commands
+        dply.debug_internals = self.debug_internals
         
         if self.execute == 'create_directory':
             if self.directory > '':
-                s24dply.create_directory(self.directory)
+                dply.create_directory(self.directory)
                 if self.debug_commands == True:
                     print "Executing " + self.execute
                     print ""
@@ -431,53 +431,53 @@ class s24dbaf():
     
         elif self.execute == 'create_backup_directories':
             try:
-                self.backup_base = os.environ["BACKUP_BASE"]
+                self.bckp_base = os.environ["BCKP_BASE"]
             except KeyError:
-                print "BACKUP_BASE environment variable is not set."
+                print "BCKP_BASE environment variable is not set."
                 print "Exiting"
                 sys.exit()
     
-            if self.hostname > '' and self.backup_base > '' and self.instance > '':
-                s24dply.create_backup_directories(self.hostname, self.backup_base, self.instance)
+            if self.hostname > '' and self.bckp_base > '' and self.instance > '':
+                dply.create_backup_directories(self.hostname, self.bckp_base, self.instance)
     
     
         elif self.execute == 'create_local_directories':
-            if self.hostname > '' and self.s24dbaf_base > '' and self.instance > '':
-                s24dply.create_local_directories(self.hostname, self.s24dbaf_base, self.instance):
+            if self.hostname > '' and self.dbaf_base > '' and self.instance > '':
+                dply.create_local_directories(self.hostname, self.dbaf_base, self.instance):
     
     
-        elif self.execute == 'create_s24dba_user':
-            if self.hostname > '' and self.s24dbaf_base > '' and self.instance > '':
-                s24dply.create_s24dba_user(self.hostname, self.s24dbaf_base, self.instance):
+        elif self.execute == 'create_dba_user':
+            if self.hostname > '' and self.dbaf_base > '' and self.instance > '':
+                dply.create_dba_user(self.hostname, self.dbaf_base, self.instance):
     
     
         elif self.execute == 'list_oratab':
-            s24dply.list_oratab(self.debug_internals = False)
+            dply.list_oratab(self.debug_internals = False)
     
     
         elif self.execute == 'deploy_sshkeys':
-            s24dply.deploy_sshkeys(self.S24DBAF_BASE)
+            dply.deploy_sshkeys(self.DBAF_BASE)
             if self.debug_commands == True:
                 print "Executing " + self.execute
                 print ""
     
     
         elif self.execute == 'display_local_sshkeys':
-            s24dply.display_local_sshkeys()
+            dply.display_local_sshkeys()
             if self.debug_commands == True:
                 print "Executing " + self.execute
                 print ""
     
     
         elif self.execute == 'display_master_sshkeys':
-            s24dply.display_master_sshkeys(self.S24DBAF_BASE)
+            dply.display_master_sshkeys(self.DBAF_BASE)
             if self.debug_commands == True:
                 print "Executing " + self.execute
                 print ""
     
     
         # --------------------------------------------------------------------------
-        # s24pwlt module
+        # pwlt module
         # Get a random password that includes upper case, lower case, digits, and special cases
         # Requires setting the password length
         elif self.execute == 'get_random_password':
@@ -488,7 +488,7 @@ class s24dbaf():
             self.special_min = 4
     
             if self.password_length >= 15:
-                my_password = s24pwlt.get_random_password(self.password_length, self.upper_min, self.lower_min, self.digits_min, self.special_min)
+                my_password = pwlt.get_random_password(self.password_length, self.upper_min, self.lower_min, self.digits_min, self.special_min)
     
                 if self.debug_commands == True:
                     print "  PASSWORD:     " + my_password
@@ -508,23 +508,23 @@ class s24dbaf():
     
     
         elif self.execute == 'enable_password_wallet':
-            s24pwlt.enable_password_wallet()
+            pwlt.enable_password_wallet()
     
     
         elif self.execute == 'disable_password_wallet':
-            s24pwlt.disable_password_wallet()
+            pwlt.disable_password_wallet()
     
     
         elif self.execute == 'create_service_accounts':
-            s24pwlt.create_service_accounts(self.instance)
+            pwlt.create_service_accounts(self.instance)
     
     
     
         # --------------------------------------------------------------------------
-        # s24rcat module
+        # rcat module
         # Create rman catalog owner
         elif self.execute == 'create_rman_catalog_owner':
-            s24rcat.create_rman_catalog_owner(self.client_code)
+            rcat.create_rman_catalog_owner(self.client_code)
             if self.debug_commands == True:
                 print "Executing " + self.execute
                 print ""
@@ -532,7 +532,7 @@ class s24dbaf():
     
         # Create catalog
         elif self.execute == 'create_rman_catalog':
-            #s24rcat.create_rman_catalog()
+            #rcat.create_rman_catalog()
             if self.debug_commands == True:
                 print "Executing " + self.execute
                 print ""
@@ -540,7 +540,7 @@ class s24dbaf():
     
         # Add rman catalog to tnsnames
         elif self.execute == 'add_rman_catalog_to_tnsnames':
-            #s24rcat.add_rman_catalog_to_tnsnames()
+            #rcat.add_rman_catalog_to_tnsnames()
             if self.debug_commands == True:
                 print "Executing " + self.execute
                 print ""
@@ -548,7 +548,7 @@ class s24dbaf():
     
         # Register database
         elif self.execute == 'register_database':
-            #s24rcat.register_database()
+            #rcat.register_database()
             if self.debug_commands == True:
                 print "Executing " + self.execute
                 print ""
@@ -556,7 +556,7 @@ class s24dbaf():
     
         # Resynch
         elif self.execute == 'resynch':
-            #s24rcat.resynch()
+            #rcat.resynch()
             if self.debug_commands == True:
                 print "Executing " + self.execute
                 print ""
@@ -564,7 +564,7 @@ class s24dbaf():
     
         # Resynch from controlfile copy
         elif self.execute == 'resynch_from_controlfile_copy':
-            #s24rcat.resynch_from_controlfile_copy()
+            #rcat.resynch_from_controlfile_copy()
             if self.debug_commands == True:
                 print "Executing " + self.execute
                 print ""
@@ -572,7 +572,7 @@ class s24dbaf():
     
         # Unregister database
         elif self.execute == 'unregister_database':
-            #s24rcat.unregister_database()
+            #rcat.unregister_database()
             if self.debug_commands == True:
                 print "Executing " + self.execute
                 print ""
@@ -580,7 +580,7 @@ class s24dbaf():
     
         # Drop catalog
         elif self.execute == 'drop_catalog':
-            #s24rcat.drop_catalog()
+            #rcat.drop_catalog()
             if self.debug_commands == True:
                 print "Executing " + self.execute
                 print ""

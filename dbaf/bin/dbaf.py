@@ -4,7 +4,7 @@ import os
 import getopt
 import utlcnfg
 
-class s24dbaf():
+class dbaf():
     def __init__(self):
         self.client_code = ''
         self.hostname = ''
@@ -24,7 +24,7 @@ class s24dbaf():
         self.help = False
         self.password_length = 0
 
-        self.s24dbaf_home_dir = ''
+        self.dbaf_home_dir = ''
         self.backup_base_dir = ''
 
         self.debug_commands = False
@@ -76,7 +76,7 @@ if __name__ == '__main__':
         'debug',
         'debug_internals',
 
-      # Deploy procedures from s24dply
+      # Deploy procedures from dply
         'create_directory',
         'create_backup_directories',
         'create_local_directories',
@@ -95,9 +95,9 @@ if __name__ == '__main__':
           'enable',
           'disable',
 
-      # RMAN Procedures from s24rman
+      # RMAN Procedures from rman
 
-      # RMAN Catalog Procedures from s24rcat
+      # RMAN Catalog Procedures from rcat
         'create_rman_catalog_owner',
         'create_rman_catalog',
         'add_rman_catalog_to_tnsnames',
@@ -108,7 +108,7 @@ if __name__ == '__main__':
         'unregister_database',
         'drop_catalog'
 
-      # PeopleSoft Procedures from s24psft
+      # PeopleSoft Procedures from psft
       ])
 
 
@@ -194,30 +194,30 @@ if __name__ == '__main__':
             help = True
 
         # --------------------------------------------------------------------------
-        # s24dply module
+        # dply module
         # Creates a single directory
         elif opt in ('--create_directory':
             execute = 'create_directory'
 
-    s24_dbaf = s24dbaf
-    utl_cnfg = utlcnfg.utlcnfg ('s24dply', debug_commands = False)
+    dbaf = dbaf
+    utl_cnfg = utlcnfg.utlcnfg ('dply', debug_commands = False)
 
-    s24_dbaf.oracle_owner = oracle_owner.lower()
-    s24_dbaf.ticket = ticket.upper()
-    s24_dbaf.hostname = utl_cnfg.get_hostname()
-    s24_dbaf.oracle_sid = utl_cnfg.get_oracle_sid()
-    s24_dbaf.oracle_home = utl_cnfg.get_oracle_home()
-    s24_dbaf.module_lib_dir = utl_cnfg.get_module_lib_dir()
-    s24_dbaf.module_sql_dir = utl_cnfg.get_module_sql_dir()
+    dbaf.oracle_owner = oracle_owner.lower()
+    dbaf.ticket = ticket.upper()
+    dbaf.hostname = utl_cnfg.get_hostname()
+    dbaf.oracle_sid = utl_cnfg.get_oracle_sid()
+    dbaf.oracle_home = utl_cnfg.get_oracle_home()
+    dbaf.module_lib_dir = utl_cnfg.get_module_lib_dir()
+    dbaf.module_sql_dir = utl_cnfg.get_module_sql_dir()
 
-    print s24_dbaf.oracle_owner
-    print s24_dbaf.ticket
+    print dbaf.oracle_owner
+    print dbaf.ticket
     
-    print s24_dbaf.hostname
-    print s24_dbaf.oracle_sid
-    print s24_dbaf.oracle_home
-    print s24_dbaf.module_lib_dir
-    print s24_dbaf.module_sql_dir
+    print dbaf.hostname
+    print dbaf.oracle_sid
+    print dbaf.oracle_home
+    print dbaf.module_lib_dir
+    print dbaf.module_sql_dir
 
     print utl_cnfg.get_hostname()
     utl_cnfg.list_oratab()
