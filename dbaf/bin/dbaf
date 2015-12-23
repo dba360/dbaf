@@ -14,7 +14,7 @@ class dbaf():
     # c_ = ""
 
     def __init__(self):
-    	  self.name = name
+        self.name = name
         self.client_code = ''
         self.hostname = ''
         self.oracle_owner = ''
@@ -106,7 +106,7 @@ class dbaf():
         for opt, arg in opts:
             print opt
             print arg
-    
+
             # Determines if high level debug statements should be shown while executing the script
             # This is typically used to show high level results
             if opt in ('--debug'):
@@ -115,7 +115,7 @@ class dbaf():
                 print "===================================================================================================="
                 print 'Result Level Debuging Enabled'
                 print "----------------------------------------------------------------------------------------------------"
-    
+
             # Determines if debug statements should be shown while executing the script
             # This is typically used to show debug statements inside of each function
             elif opt in ('--debug_internals'):
@@ -125,246 +125,246 @@ class dbaf():
                 print "===================================================================================================="
                 print 'Procedure Level Debuging Enabled'
                 print "----------------------------------------------------------------------------------------------------"
-    
+
             # Sets the client code
             elif opt in ('-c', '--client_code'):
                 p_client_code = arg
-    
+
             # Sets the hostname of the server
             elif opt in ('-h', '--hostname'):
                 p_hostname = arg
-    
+
             # Overwrites the oracle owner from 'oracle' to new OS owner
             elif opt in ('-o', '--oracle_owner'):
                 p_oracle_owner = arg
-    
+
             # Sets the global name of the database
             elif opt in ('-g', '--gdb', '--global_database_name'):
                 p_global_database_name = arg
-    
+
             # Sets the name of the database
             elif opt in ('-d', '--db', '--database'):
                 p_database = arg
-    
+
             # Sets the oracle_sid of the database
             elif opt in ('-i', '--instance'):
                 p_instance = arg
-    
+
             # The name of the parfile to use
             elif opt in ('-s', '--schema'):
                 p_schema = arg
-    
+
             # The name of the parfile to use
             elif opt in ('-p', '--directory'):
                 p_directory = arg
-    
+
             # The name of the parfile to use
             elif opt in ('-p', '--parfile'):
                 p_parfile = arg
-    
+
             # Creates a ticket directory for logs and artifacts
             elif opt in ('-t', '--ticket'):
                 p_ticket = arg
-    
+
             # Email the results to recipients
             elif opt in ('-e', '--email'):
                 p_email = arg
-    
+
             # Sets the os username
             elif opt in ('-u', '--username'):
                 p_username = arg
-    
+
             # Schedule the
             elif opt in ('--schedule'):
                 p_schedule = arg
-    
+
             # Displays help
             elif opt in ('-?', '--help'):
                 p_help = True
-    
+
             # --------------------------------------------------------------------------
             # dply module
             # Creates a single directory
             elif opt in ('--create_directory':
                 p_execute = 'create_directory'
-    
+
             # Creates backup directories for rman and dpmp
             elif opt in ('--create_backup_directories':
                 p_execute = 'create_backup_directories'
-    
+
             # Creates local directories for the host and each database
             elif opt in ('--create_local_directories':
                 p_execute = 'create_local_directories'
-    
+
             # Creates local directories for the host and each database
             elif opt in ('--create_dba_user':
                 p_execute = 'create_dba_user'
-    
+
             # Lists entries in oratab
             elif opt in ('--list_oratab':
                 p_execute = 'list_oratab'
-    
+
             # Deploy ssh keys
             elif opt in ('--deploy_sshkeys'):
                 p_execute = 'deploy_sshkeys'
-    
+
             # Display sshkeys from local authorized_keys
             elif opt in ('--display_local_sshkeys'):
                 p_execute = 'display_local_sshkeys'
-    
+
             # Display sshkeys in master sshkey list
             elif opt in ('--display_master_sshkeys'):
                 p_execute = 'display_master_sshkeys'
-    
+
             # Get a random password
             # Default password length is 25.
             # The password length can be changed using --password_length
             elif opt in ('--get_random_password':
                 p_execute = 'get_random_password',
-    
+
             # Sets the password length
             elif opt in ('--password_length=':
                 p_execute = 'password_length=',
-    
+
             # Enables the password wallet
             elif opt in ('--enable_password_wallet':
                 p_execute = 'enable_password_wallet',
-    
+
             # Disables the password wallet
             elif opt in ('--disable_password_wallet':
                 p_execute = 'disable_password_wallet',
-    
+
             # Creates all service accounts
             elif opt in ('--create_service_accounts':
                 p_execute = 'create_service_accounts'
-    
-    
-    
+
+
+
             # --------------------------------------------------------------------------
             # rcat module
             # Create rman catalog owner
             # Requires client code
             elif opt in ('--create_rman_catalog_owner'):
                 p_execute = 'create_rman_catalog_owner'
-    
+
             # Create rman catalog
             # Requires client code
             elif opt in ('--create_rman_catalog'):
                 p_execute = 'create_rman_catalog'
-    
+
             # Add the rman catalog database entry to tnsnames
             elif opt in ('--add_rman_catalog_to_tnsnames'):
                 p_execute = 'add_rman_catalog_to_tnsnames'
-    
+
             # Register database to the rman catalog
             # Requires database name
             elif opt in ('--register_database'):
                 p_execute = 'register_database'
-    
+
             # Resynch to rman catalog
             elif opt in ('--resynch'):
                 p_execute = 'resynch'
-    
+
             # Resynch to rman catalog using controlfile copy
             elif opt in ('--resynch_from_controlfile_copy'):
                 p_execute = 'resynch_from_controlfile_copy'
-    
+
             # Catalog rman backups in a directory
             # Requires directory name
             elif opt in ('--catalog_disk_start_with'):
                 p_execute = 'catalog_disk_start_with'
                 p_directory = arg
-    
+
             # Unegister database from the rman catalog
             # Requires database name
             elif opt in ('--unregister_database'):
                 p_execute = 'unregister_database'
-    
+
             # Drop rman catalog
             # Requires client code
             elif opt in ('--drop_catalog'):
                 p_execute = 'drop_catalog'
-    
+
             # Lists the databases in /etc/oratab
             elif opt in ('--list_oratab'):
                 p_execute = 'list_oratab'
-    
-    
+
+
         # ==========================================================================
         #
         # Sets the Client's Code
         if p_client_code != '':
             self.client_code = p_client_code
-    
+
         # Sets the hostname of the server
         if p_hostname != '':
             self.hostname = p_hostname
         else:
             self.hostname = dply.get_hostname()
-    
+
         # Sets the global name of the database
         if p_global_database_name != '':
             self.global_database_name = p_global_database_name
             self.database = self.global_database_name.split(".")[0]
             self.instance = self.database
-    
+
         # Sets the global name of the database
         if p_database != '':
             self.database = p_database
             self.instance = self.database
-    
+
         # Sets the name of the database instance
         if p_instance != '':
             self.instance = p_instance
             print 'self.instance = p_instance'
-    
+
         if self.instance == '':
             self.instance = dply.get_oracle_sid()
         #requires creating self object
         #else:
         #    self.instance = set_oracle_sid(self.instance)
-    
+
         # By default the owner of Oracle's software is 'oracle'.
         # Set the Oracle's software owner on this server
         self.oracle_owner = p_oracle_owner
-    
+
         # Sets the name of the database schema
         if p_schema != '':
             self.schema = p_schema
-    
+
         # Sets the directory name
         if p_directory != '':
             self.directory = p_directory
-    
+
         # Sets the file name of the parfile
         if p_parfile != '':
             self.parfile = p_parfile
-    
+
         # All actions will be loged into files in a named ticket directory
         if p_ticket != '':
             self.ticket = p_ticket
-    
+
         # The email distribution list that will recieve email
         if p_email != '':
             self.email = p_email
-    
+
         # The OS username
         if p_username != '':
             self.username = p_username
-    
+
         # Sets a cron schedule
         if p_schedule != '':
             self.schedule = p_schedule
-    
+
         # Executes a task
         if p_execute != '':
             self.execute = p_execute
-    
+
         # Show help
         if p_help == True:
             sys.exit()
-    
-    
+
+
         # Verify the environment is setup properly
         # Verify that DBAF_BASE is set
         try:
@@ -373,14 +373,14 @@ class dbaf():
             print "DBAF_BASE environment variable is not set."
             print "Exiting"
             sys.exit()
-    
+
         # Verify the DBAF_BASE directory exists
         self.dbaf_base = os.environ["DBAF_BASE"].rstrip('\/')
         if not os.path.exists(self.dbaf_base):
             print "The directory '" + self.dbaf_base + "' does not exist."
             print "Exiting"
             sys.exit()
-    
+
         # If debug results is set to True, show debug statements
         if self.debug_commands == True:
             print "  CLIENT CODE:  " + self.client_code
@@ -398,18 +398,18 @@ class dbaf():
             print "  DBAF_HOME:    " + self.dbaf_home_dir
             print "  BCKP_BASE:    " + self.bckp_base_dir
             print "  DIRECTORY:    " + self.directory
-    
-    
+
+
         # ==========================================================================
         # Execution mapping
-    
-    
+
+
         # --------------------------------------------------------------------------
         # dply module
         dply = dply()
         dply.debug_commands = self.debug_commands
         dply.debug_internals = self.debug_internals
-        
+
         if self.execute == 'create_directory':
             if self.directory > '':
                 dply.create_directory(self.directory)
@@ -427,8 +427,8 @@ class dbaf():
                 print "==  ronniecli --ensure_directory_exists --directory /dir/name"
                 print "=="
                 print "----------------------------------------------------------------------------------------------------"
-    
-    
+
+
         elif self.execute == 'create_backup_directories':
             try:
                 self.bckp_base = os.environ["BCKP_BASE"]
@@ -436,46 +436,46 @@ class dbaf():
                 print "BCKP_BASE environment variable is not set."
                 print "Exiting"
                 sys.exit()
-    
+
             if self.hostname > '' and self.bckp_base > '' and self.instance > '':
                 dply.create_backup_directories(self.hostname, self.bckp_base, self.instance)
-    
-    
+
+
         elif self.execute == 'create_local_directories':
             if self.hostname > '' and self.dbaf_base > '' and self.instance > '':
                 dply.create_local_directories(self.hostname, self.dbaf_base, self.instance):
-    
-    
+
+
         elif self.execute == 'create_dba_user':
             if self.hostname > '' and self.dbaf_base > '' and self.instance > '':
                 dply.create_dba_user(self.hostname, self.dbaf_base, self.instance):
-    
-    
+
+
         elif self.execute == 'list_oratab':
             dply.list_oratab(self.debug_internals = False)
-    
-    
+
+
         elif self.execute == 'deploy_sshkeys':
             dply.deploy_sshkeys(self.DBAF_BASE)
             if self.debug_commands == True:
                 print "Executing " + self.execute
                 print ""
-    
-    
+
+
         elif self.execute == 'display_local_sshkeys':
             dply.display_local_sshkeys()
             if self.debug_commands == True:
                 print "Executing " + self.execute
                 print ""
-    
-    
+
+
         elif self.execute == 'display_master_sshkeys':
             dply.display_master_sshkeys(self.DBAF_BASE)
             if self.debug_commands == True:
                 print "Executing " + self.execute
                 print ""
-    
-    
+
+
         # --------------------------------------------------------------------------
         # pwlt module
         # Get a random password that includes upper case, lower case, digits, and special cases
@@ -486,10 +486,10 @@ class dbaf():
             self.lower_min = 4
             self.digits_min = 4
             self.special_min = 4
-    
+
             if self.password_length >= 15:
                 my_password = pwlt.get_random_password(self.password_length, self.upper_min, self.lower_min, self.digits_min, self.special_min)
-    
+
                 if self.debug_commands == True:
                     print "  PASSWORD:     " + my_password
                     print ""
@@ -503,23 +503,23 @@ class dbaf():
                 print "== ronniecli --get_random_password --password_length=25"
                 print "=="
                 print "----------------------------------------------------------------------------------------------------"
-    
+
                 sys.exit()
-    
-    
+
+
         elif self.execute == 'enable_password_wallet':
             pwlt.enable_password_wallet()
-    
-    
+
+
         elif self.execute == 'disable_password_wallet':
             pwlt.disable_password_wallet()
-    
-    
+
+
         elif self.execute == 'create_service_accounts':
             pwlt.create_service_accounts(self.instance)
-    
-    
-    
+
+
+
         # --------------------------------------------------------------------------
         # rcat module
         # Create rman catalog owner
@@ -528,56 +528,56 @@ class dbaf():
             if self.debug_commands == True:
                 print "Executing " + self.execute
                 print ""
-    
-    
+
+
         # Create catalog
         elif self.execute == 'create_rman_catalog':
             #rcat.create_rman_catalog()
             if self.debug_commands == True:
                 print "Executing " + self.execute
                 print ""
-    
-    
+
+
         # Add rman catalog to tnsnames
         elif self.execute == 'add_rman_catalog_to_tnsnames':
             #rcat.add_rman_catalog_to_tnsnames()
             if self.debug_commands == True:
                 print "Executing " + self.execute
                 print ""
-    
-    
+
+
         # Register database
         elif self.execute == 'register_database':
             #rcat.register_database()
             if self.debug_commands == True:
                 print "Executing " + self.execute
                 print ""
-    
-    
+
+
         # Resynch
         elif self.execute == 'resynch':
             #rcat.resynch()
             if self.debug_commands == True:
                 print "Executing " + self.execute
                 print ""
-    
-    
+
+
         # Resynch from controlfile copy
         elif self.execute == 'resynch_from_controlfile_copy':
             #rcat.resynch_from_controlfile_copy()
             if self.debug_commands == True:
                 print "Executing " + self.execute
                 print ""
-    
-    
+
+
         # Unregister database
         elif self.execute == 'unregister_database':
             #rcat.unregister_database()
             if self.debug_commands == True:
                 print "Executing " + self.execute
                 print ""
-    
-    
+
+
         # Drop catalog
         elif self.execute == 'drop_catalog':
             #rcat.drop_catalog()
