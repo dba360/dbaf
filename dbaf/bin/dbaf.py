@@ -2,7 +2,8 @@
 import sys
 import os
 import getopt
-import utlcnfg
+#import utlcnfg
+#  This is a test
 
 class dbaf():
     def __init__(self):
